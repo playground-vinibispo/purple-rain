@@ -11,7 +11,7 @@ var (
 )
 
 func main() {
-	var drops [100]models.Drop
+	var drops [500]models.Drop
 	rl.InitWindow(640, 360, "purple-rain")
 	for i := 0; i < len(drops); i++ {
 		drops[i] = models.NewDrop()

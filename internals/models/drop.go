@@ -12,7 +12,9 @@ var (
 
 type Drop struct {
 	rl.Vector2
-	Speed float32
+	speed  float32
+	length float32
+	z      float32
 }
 
 func random(minimum, maximum float32) float32 {
@@ -21,19 +23,30 @@ func random(minimum, maximum float32) float32 {
 
 func NewDrop() Drop {
 	x := random(0, float32(rl.GetScreenWidth()))
-	y := random(-200, -100)
-	speed := random(4, 10)
-	return Drop{rl.NewVector2(x, float32(y)), float32(speed)}
+	y := random(-500, -50)
+	z := random(0, 20)
+	speed := rl.Remap(z, 0, 20, 1, 20)
+	length := rl.Remap(z, 0, 20, 10, 20)
+	return Drop{
+		Vector2: rl.NewVector2(x, y),
+		speed:   speed,
+		length:  length,
+		z:       z,
+	}
 }
 
 func (d *Drop) Fall() {
-	d.Y += d.Speed
+	d.Y += d.speed
+	gravity := rl.Remap(d.z, 0, 20, 0, 0.2)
+	d.speed += gravity
 	if d.Y > float32(rl.GetScreenHeight()) {
 		d.Y = random(-200, -100)
+		d.speed = rl.Remap(d.z, 0, 20, 4, 10)
 	}
 }
 
 func (d *Drop) Show() {
-	rl.DrawLineV(d.Vector2, rl.NewVector2(d.X, d.Y+10), purple)
-	// rl.DrawLineEx(d.Vector2, rl.NewVector2(d.X, d.Y+10), 2, purple)
+	thick := rl.Remap(d.z, 0, 20, 1, 3)
+	// rl.DrawLineV(d.Vector2, rl.NewVector2(d.X, d.Y+d.length), purple)
+	rl.DrawLineEx(d.Vector2, rl.NewVector2(d.X, d.Y+10), thick, purple)
 }
