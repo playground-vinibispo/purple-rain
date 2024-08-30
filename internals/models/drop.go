@@ -22,14 +22,18 @@ func random(minimum, maximum float32) float32 {
 func NewDrop() Drop {
 	x := random(0, float32(rl.GetScreenWidth()))
 	y := random(-200, -100)
-	speed := 1
+	speed := random(4, 10)
 	return Drop{rl.NewVector2(x, float32(y)), float32(speed)}
 }
 
 func (d *Drop) Fall() {
 	d.Y += d.Speed
+	if d.Y > float32(rl.GetScreenHeight()) {
+		d.Y = random(-200, -100)
+	}
 }
 
 func (d *Drop) Show() {
-	rl.DrawLineEx(d.Vector2, rl.NewVector2(d.X, d.Y+10), 2, purple)
+	rl.DrawLineV(d.Vector2, rl.NewVector2(d.X, d.Y+10), purple)
+	// rl.DrawLineEx(d.Vector2, rl.NewVector2(d.X, d.Y+10), 2, purple)
 }
